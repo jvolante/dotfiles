@@ -19,18 +19,20 @@ Plug 'bling/vim-bufferline'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'ctrlpvim/ctrlp.vim'
-"Plug 'valloric/youcompleteme'
+Plug 'valloric/youcompleteme'
 Plug 'easymotion/vim-easymotion'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'xuyuanp/nerdtree-git-plugin'
 Plug 'airblade/vim-gitgutter'
-"Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 Plug 'bling/vim-airline'
 Plug 'sjl/gundo.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'junegunn/vim-easy-align'
 Plug 'w0rp/ale'
+Plug 'sirver/ultisnips'
+Plug 'honza/vim-snippets'
 
 call plug#end() " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -58,11 +60,11 @@ set softtabstop=4               " Tab width
 set incsearch                   " Start searching when you start typing
 set showcmd                     " Show matching brackets
 set expandtab                   " No real tabs(spaces instead)
-set smarttab                    " No real tabs(spaces instead)
 set scrolloff=2                 " Screen automatically scrolls with cursor
 set lazyredraw                  " Redraw only when needed
 set foldmethod=syntax           " Fold based on syntax elemetnts (like most editors)
 set noshowmode                  " Don't do what Airline already does for us
+set breakindent                 " Make wrapped lines indent to the same position
 set list                        " Enable listchars
 
 " How to render non printable characters
@@ -134,7 +136,28 @@ nmap <leader>pm :CtrlPMixed<cr>
 " See most recently used files
 nmap <leader>pr :CtrlPMRU<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" end ctrlP stuff
+"" End ctrlP stuff
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Ultisnips stuff
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsExpandTrigger="<C-f>"
+let g:UltiSnipsJumpForwardTrigger="<C-v>"
+let g:UltiSnipsJumpBackwardTrigger="<C-c>"
+
+let g:UltisnipsEditSplit="vertical"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" End Ultisnips stuff
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" YouCompleteMe stuff
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ycm_python_binary_path = 'python'
+let g:ycm_seed_identifiers_with_syntax = 1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" End YouCompleteMe stuff
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "NerdTree stuff-----------------------------------------------------------------------------------
