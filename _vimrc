@@ -49,6 +49,7 @@ set nu                          " show line numbers
 set hidden                      " Treat tabs like other editors
 set showcmd                     " Show multiple commands in command line
 set hlsearch                    " Highlight search
+set ignorecase                  " Ignore the case of search
 set smartcase                   " Only care about case if there are caps
 set autoindent                  " Automatically indent
 set backspace=indent,eol,start  " Back space is more intuitive
