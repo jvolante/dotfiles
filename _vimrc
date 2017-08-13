@@ -74,7 +74,7 @@ set noshowmode                  " Don't do what Airline already does for us
 set list                        " Enable listchars
 
 " Sometimes I need to use an old crappy vim (work) so be ready for that
-if v:version >= 704
+if v:version >= 704 || has('nvim')
     set breakindent             " Make wrapped lines indent to the same position
 endif
 
