@@ -222,3 +222,17 @@ try
     let g:airline#extensions#ale#enabled = 1
 catch
 endtry
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" End ALE
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set up multiple-cursors
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! Multiple_cursors_before()
+    let b:ycm_largefile=1
+endfunction
+
+function! Multiple_cursors_after()
+    let b:ycm_largefile=0
+endfunction
