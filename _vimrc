@@ -15,11 +15,20 @@ else
     call plug#begin('~/.vim/bundle')
 endif
 
+if v:version >= 704 || has('nvim')
+    Plug 'valloric/youcompleteme'
+    Plug 'sirver/ultisnips'
+    Plug 'honza/vim-snippets'
+endif
+
+if v:version >= 800 || has('nvim')
+    Plug 'w0rp/ale'
+endif
+
 Plug 'bling/vim-bufferline'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'valloric/youcompleteme'
 Plug 'easymotion/vim-easymotion'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'xuyuanp/nerdtree-git-plugin'
@@ -30,9 +39,6 @@ Plug 'sjl/gundo.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'junegunn/vim-easy-align'
-Plug 'w0rp/ale'
-Plug 'sirver/ultisnips'
-Plug 'honza/vim-snippets'
 
 call plug#end() " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -65,8 +71,12 @@ set scrolloff=2                 " Screen automatically scrolls with cursor
 set lazyredraw                  " Redraw only when needed
 set foldmethod=syntax           " Fold based on syntax elemetnts (like most editors)
 set noshowmode                  " Don't do what Airline already does for us
-set breakindent                 " Make wrapped lines indent to the same position
 set list                        " Enable listchars
+
+" Sometimes I need to use an old crappy vim (work) so be ready for that
+if v:version >= 704
+    set breakindent             " Make wrapped lines indent to the same position
+endif
 
 " How to render non printable characters
 set listchars=nbsp:¬,extends:»,precedes:«
@@ -97,10 +107,17 @@ set background=dark
 let g:airline_theme='quantum'
 colorscheme quantum
 
+" Automatically blow away trailing whitespace on certian filetypes
+autocmd Filetype c,cpp,java,php,js autocmd BufWritePre <buffer> %s/\s\+$//e
+
+" For some reason whenever I try to do a write I always have a W instead of w
+command W w
+command Wq wq
+
 " Remap leader to ','
 let mapleader=","
 
-" Easy spit nav
+" Easy spit navigation
 nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
@@ -143,11 +160,14 @@ nmap <leader>pr :CtrlPMRU<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Ultisnips stuff
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsExpandTrigger="<C-f>"
-let g:UltiSnipsJumpForwardTrigger="<C-v>"
-let g:UltiSnipsJumpBackwardTrigger="<C-c>"
+try
+    let g:UltiSnipsExpandTrigger="<C-f>"
+    let g:UltiSnipsJumpForwardTrigger="<C-v>"
+    let g:UltiSnipsJumpBackwardTrigger="<C-c>"
 
-let g:UltisnipsEditSplit="vertical"
+    let g:UltisnipsEditSplit="vertical"
+catch
+endtry
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" End Ultisnips stuff
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -155,13 +175,16 @@ let g:UltisnipsEditSplit="vertical"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" YouCompleteMe stuff
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ycm_python_binary_path = 'python'
-let g:ycm_seed_identifiers_with_syntax = 1
+try
+    let g:ycm_python_binary_path = 'python'
+    let g:ycm_seed_identifiers_with_syntax = 1
+catch
+endtry
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" End YouCompleteMe stuff
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"NerdTree stuff-----------------------------------------------------------------------------------
+"NerdTree stuff ----------------------------------------------------------------
 "auto open NERDTree on startup
 "autocmd vimenter * NERDTree
 "start focus in other window
@@ -188,9 +211,14 @@ let g:NERDTreeIndicatorMapCustom = {
     \ "Unknown"   : "?"
     \ }
 
-"end nerdtree-------------------------------------------------------------------------------------
+"end nerdtree ------------------------------------------------------------------
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set up ALE
-packloadall
-silent! helptags ALL
-let g:airline#extensions#ale#enabled = 1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+try
+    packloadall
+    silent! helptags ALL
+    let g:airline#extensions#ale#enabled = 1
+catch
+endtry
