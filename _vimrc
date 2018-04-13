@@ -1,17 +1,19 @@
-" get out of vi-compatible mode and don't use local .vimrc
+" Get out of vi-compatible mode and don't use local .vimrc
 set noexrc
 set nocompatible
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" PLUGINS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use a different pluggins directory on Windows vs. Linux
 if has("win32") || has("win64")
-    "Be pretty on Windows
+    " Be pretty on Windows
     set renderoptions=type:directx,geom:1,renmode:5,taamode:1
+
+    " Use a different pluggins directory on Windows vs. Linux
     call plug#begin('~/vimfiles/bundle')
 else
     set antialias " Be pretty
+    " Use a different pluggins directory on Windows vs. Linux
     call plug#begin('~/.vim/bundle')
 endif
 
@@ -39,6 +41,17 @@ Plug 'sjl/gundo.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'junegunn/vim-easy-align'
+Plug 'tmhedberg/simpylfold'
+Plug 'tpope/vim-commentary'
+if v:version >= 704 || has('nvim')
+    "Plug 'valloric/youcompleteme'
+    "Plug 'sirver/ultisnips'
+    "Plug 'honza/vim-snippets'
+endif
+if v:version >= 800 || has('nvim')
+    Plug 'w0rp/ale'
+    Plug 'mhinz/vim-startify'
+endif
 
 call plug#end() " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -136,6 +149,9 @@ nnoremap <leader>gp "+gP
 " Move vertically by visual line instead of line number
 nnoremap j gj
 nnoremap k gk
+
+" Tagbar
+nmap <F8>:TagbarToggle<CR>
 
 " Easyalign
 xmap ga <Plug>(EasyAlign)
