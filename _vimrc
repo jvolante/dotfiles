@@ -17,16 +17,6 @@ else
     call plug#begin('~/.vim/bundle')
 endif
 
-if v:version >= 704 || has('nvim')
-    Plug 'valloric/youcompleteme'
-    Plug 'sirver/ultisnips'
-    Plug 'honza/vim-snippets'
-endif
-
-if v:version >= 800 || has('nvim')
-    Plug 'w0rp/ale'
-endif
-
 Plug 'bling/vim-bufferline'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
