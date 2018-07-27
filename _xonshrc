@@ -1,0 +1,7 @@
+import numpy as np
+import pandas as pd
+
+aliases['sl']='ls'
+
+$PROJECT_DIRS='~/code'
+$XONSH_SHOW_TRACEBACK=True

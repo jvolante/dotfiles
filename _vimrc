@@ -113,7 +113,7 @@ let g:bufferline_echo = 0
 
 set background=dark
 if has('gui_running')
-    set guifont=Operator_Mono_Light:h11:cANSI " Set the font
+    set guifont=Monospace\ 11,Operator_Mono_Light:h11:cANSI " Set the font
     "let g:quantum_italics=1  " Italic comments
 
     "hide toolbars and sidebar
