@@ -42,6 +42,7 @@ Plug 'tyrannicaltoucan/vim-quantum' " quantum colorscheme
 Plug 'justinmk/vim-sneak'           " The sneak motion (2 char f)
 Plug 'travisjeffery/vim-auto-mkdir' " Automatically create directories
 Plug '907th/vim-auto-save'          " Autosave on edit
+Plug 'linkinpark342/xonsh-vim'      " Xonsh syntax higlighting
 
 if has('python') || has('python3')
     Plug 'sjl/gundo.vim'            " Full tree based undo in vim
