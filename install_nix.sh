@@ -1,5 +1,8 @@
 echo "Setting up Vim"
-cp _vimrc ~/.vimrc
-cp -r vimfiles ~/.vim
+ln -s _vimrc ~/.vimrc
+ln -s vimfiles ~/.vim
 vim +silent! +PlugInstall +qall
 echo "Done with Vim"
+echo "Setting up Xonsh"
+ln -s _xonshrc ~/.xonshrc
+echo "Done with Xonsh"

@@ -92,6 +92,7 @@ set lazyredraw                  " Redraw only when needed
 set foldmethod=syntax           " Fold based on syntax elemetnts
 set noshowmode                  " Don't do what Airline already does for us
 set undofile                    " Persist undo tree between runs
+let g:auto_save=1               " Autosave files
 
 " Ignore a bunch of not human readable stuff from autocomplete
 set wildignore+=*/.git/*,*.swp,*.pkl
@@ -113,7 +114,7 @@ let g:bufferline_echo = 0
 
 set background=dark
 if has('gui_running')
-    set guifont=Monospace\ 11,Operator_Mono_Light:h11:cANSI " Set the font
+    set guifont=Fira\ Code\ weight=453\ 12 " Set the font
     "let g:quantum_italics=1  " Italic comments
 
     "hide toolbars and sidebar
@@ -223,7 +224,7 @@ try
     packloadall
     "silent! helptags ALL
     let g:ale_lint_delay=500 " Trying to fix performance issues
-    "let g:airline#extensions#ale#enabled = 1
+    let g:airline#extensions#ale#enabled = 0
     let g:ale_python_flake8_executable = 'python3'
     let g:ale_python_flake8_options = '-m flake8 --ignore=E501'
     let g:ale_set_balloons = 0 " Disable obnoxious hovering tooltips
@@ -244,6 +245,7 @@ endtry
 " Set up airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline#extensions#hunks#enabled = 0
+let g:airline_powerline_fonts = 1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " End airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
