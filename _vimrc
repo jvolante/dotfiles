@@ -12,7 +12,9 @@ if has("win32") || has("win64")
     " Use a different pluggins directory on Windows vs. Linux
     call plug#begin('~/vimfiles/bundle')
 else
-    set antialias " Be pretty
+    if !has('nvim')
+        set antialias " Be pretty
+    endif
 
     if !isdirectory("/tmp/vim-undo-dir")
         call mkdir("/tmp/vim-undo-dir", "", 0770)
@@ -78,7 +80,6 @@ set smartcase                   " Only care about case if there are caps
 set autoindent                  " Automatically indent
 set backspace=indent,eol,start  " Back space is more intuitive
 set mouse=a                     " Allow use of mouse
-set ttymouse=xterm2             " Makes mouse work in everything
 set cursorline                  " Highlight current line
 set shiftwidth=4                " Tab width
 set softtabstop=4               " Tab width
@@ -94,6 +95,10 @@ set noshowmode                  " Don't do what Airline already does for us
 set undofile                    " Persist undo tree between runs
 set autoread                    " Automatically reload file if it changes
 let g:auto_save=1               " Autosave files
+
+if !has('nvim')
+    set ttymouse=xterm2             " Makes mouse work in everything
+endif
 
 " Ignore a bunch of not human readable stuff from autocomplete
 set wildignore+=*/.git/*,*.swp,*.pkl
