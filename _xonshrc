@@ -2,5 +2,7 @@ import warnings
 warnings.filterwarnings("ignore")
 aliases['sl']='ls'
 
-$PROJECT_DIRS='~/code'
+$PROMPT='{env_name:{} }{BOLD_GREEN}{user}@{hostname}{BOLD_BLUE}: {cwd}{branch_color}{curr_branch: ({})}{BOLD_BLUE} {ret_code_color}{ret_code}\n{BOLD_BLUE}{prompt_end}{NO_COLOR} '
+$PROJECT_DIRS='~/code/'
+$XDG_CONFIG_HOME='~/.config/'
 $XONSH_SHOW_TRACEBACK=True

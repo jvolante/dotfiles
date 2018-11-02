@@ -92,6 +92,7 @@ set lazyredraw                  " Redraw only when needed
 set foldmethod=syntax           " Fold based on syntax elemetnts
 set noshowmode                  " Don't do what Airline already does for us
 set undofile                    " Persist undo tree between runs
+set autoread                    " Automatically reload file if it changes
 let g:auto_save=1               " Autosave files
 
 " Ignore a bunch of not human readable stuff from autocomplete
@@ -246,6 +247,8 @@ endtry
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline#extensions#hunks#enabled = 0
 let g:airline_powerline_fonts = 1
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " End airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
