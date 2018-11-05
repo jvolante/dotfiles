@@ -200,7 +200,7 @@ let g:ctrlp_custom_ignore={
 
 " if RipGrep is available, use it because it is faster than grep
 if executable('rg')
-    set greprg=rg\ --color=never
+    set grepprg=rg\ --color=never
     let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
     let g:ctrlp_use_caching = 5000
 endif
