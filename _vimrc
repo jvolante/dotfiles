@@ -45,6 +45,10 @@ Plug 'justinmk/vim-sneak'           " The sneak motion (2 char f)
 Plug 'travisjeffery/vim-auto-mkdir' " Automatically create directories
 Plug '907th/vim-auto-save'          " Autosave on edit
 Plug 'linkinpark342/xonsh-vim'      " Xonsh syntax higlighting
+Plug 'sheerun/vim-polyglot'         " Syntax highlighting for a bunch of languages
+Plug 'vim-scripts/LargeFile'        " Make editing extremely large files faster
+Plug 'jreybert/vimagit'             " Good git workflow in Vim
+Plug 'junegunn/gv.vim'              " See git revision tree and diff
 
 if has('python3') || has('python')
     Plug 'sjl/gundo.vim'            " Full tree based undo in vim
@@ -52,12 +56,26 @@ endif
 
 if v:version >= 800 || has('nvim')
     Plug 'w0rp/ale'                 " Asynchronous linting
+endif
 
-    if has('python3')
-        Plug 'shougo/deoplete.nvim' " Asynchronous autocomplete
-        Plug 'sirver/ultisnips'     " Snippet framework for autocomplete
-        Plug 'honza/vim-snippets'   " Snippets for vimscript
-    endif
+if has('python3') && has('nvim')
+    Plug 'roxma/nvim-yarp'          " Dependency for ncm2
+    Plug 'ncm2/ncm2'                " Asynchronous autocomplete
+    Plug 'ncm2/ncm2-ultisnips'      " Dependency to use ultisnips with ncm2
+    Plug 'ncm2/ncm2-bufword'        " Current buffer word completion
+    Plug 'ncm2/ncm2-look.vim'       " Dictionary completion
+    Plug 'ncm2/ncm2-path'           " Path completion
+    Plug 'ncm2/ncm2-jedi'           " Python jedi completion
+    Plug 'ncm2/ncm2-vim'            " Vimscript completion
+    Plug 'sirciver/ultisnips'       " Snippet framework for autocomplete
+    Plug 'honza/vim-snippets'       " Snippets for vimscript
+    Plug 'ncm2/ncm2-match-highlight' " Highlight what ncm2 matches on
+    Plug 'ncm2/ncm2-html-subscope'  " Subscopes for HTML
+    Plug 'ncm2/ncm2-markdown-subscope'  " Subscopes for Markdown
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh'
+        \ }
 endif
 
 call plug#end() " required
@@ -128,6 +146,23 @@ if has('gui_running')
     set guioptions-=T  "remove toolbar
     set guioptions-=r  "remove right-hand scroll bar
     set guioptions-=L  "remove left-hand scroll bar
+endif
+
+let g:spring_night_high_constrast = 0
+let g:spring_night_highlight_terminal = 1
+"Disable background color erase to fix the colorshceme
+if &term =~ '256color'
+    set t_ut=
+endif
+
+" This fixes spring night for the terminal
+if has('termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
+endif
+if has('nvim')
+    set termguicolors
 endif
 
 colorscheme spring-night " Set the colorscheme
@@ -253,7 +288,9 @@ endtry
 let g:airline#extensions#hunks#enabled = 0
 let g:airline_powerline_fonts = 1
 let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " End airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
