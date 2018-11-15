@@ -29,26 +29,30 @@ endif
 
 Plug 'tpope/vim-eunuch'             " Some Unix commands on the Vim CLI
 Plug 'tpope/vim-fugitive'           " Git integration
+Plug 'tpope/vim-commentary'         " Comment toggling hotkeys
+Plug 'tpope/vim-sleuth'             " Automatically set indent
 Plug 'ctrlpvim/ctrlp.vim'           " Ctrlp like in modern editors
 Plug 'easymotion/vim-easymotion'    " Better motions for complex operations
-Plug 'terryma/vim-multiple-cursors' " For Atom/VsCode like multi cursor mode
 Plug 'mhinz/vim-signify'            " For Git diff in the gutter
 Plug 'majutsushi/tagbar'            " For IDE like jump to function/class def
 Plug 'bling/vim-airline'            " Better statusline
 Plug 'junegunn/vim-easy-align'      " Auto align on characters (eg =)
-Plug 'tpope/vim-commentary'         " Comment toggling hotkeys
+Plug 'junegunn/gv.vim'              " See git revision tree and diff
 Plug 'hdima/python-syntax'          " Better python syntax highlighting
 Plug 'tmhedberg/simpylfold'         " Better syntax based folding in python
-Plug 'rhysd/vim-color-spring-night' " spring-night colorscheme
-Plug 'tyrannicaltoucan/vim-quantum' " quantum colorscheme
+"Plug 'rhysd/vim-color-spring-night' " spring-night colorscheme
+"Plug 'tyrannicaltoucan/vim-quantum' " quantum colorscheme
+Plug 'arcticicestudio/nord-vim'     " nord colorscheme
 Plug 'justinmk/vim-sneak'           " The sneak motion (2 char f)
-Plug 'travisjeffery/vim-auto-mkdir' " Automatically create directories
+Plug 'pbrisbin/vim-mkdir'           " Automatically create directories
 Plug '907th/vim-auto-save'          " Autosave on edit
 Plug 'linkinpark342/xonsh-vim'      " Xonsh syntax higlighting
 Plug 'sheerun/vim-polyglot'         " Syntax highlighting for a bunch of languages
 Plug 'vim-scripts/LargeFile'        " Make editing extremely large files faster
 Plug 'jreybert/vimagit'             " Good git workflow in Vim
-Plug 'junegunn/gv.vim'              " See git revision tree and diff
+Plug 'google/vim-maktaba'           " Dependency for codefmt
+Plug 'google/vim-glaive'            " Dependency for codefmt
+Plug 'google/vim-codefmt'           " Pretty printer integration
 
 if has('python3') || has('python')
     Plug 'sjl/gundo.vim'            " Full tree based undo in vim
@@ -59,23 +63,21 @@ if v:version >= 800 || has('nvim')
 endif
 
 if has('python3') && has('nvim')
-    Plug 'roxma/nvim-yarp'          " Dependency for ncm2
-    Plug 'ncm2/ncm2'                " Asynchronous autocomplete
-    Plug 'ncm2/ncm2-ultisnips'      " Dependency to use ultisnips with ncm2
-    Plug 'ncm2/ncm2-bufword'        " Current buffer word completion
-    Plug 'ncm2/ncm2-look.vim'       " Dictionary completion
-    Plug 'ncm2/ncm2-path'           " Path completion
-    Plug 'ncm2/ncm2-jedi'           " Python jedi completion
-    Plug 'ncm2/ncm2-vim'            " Vimscript completion
-    Plug 'sirciver/ultisnips'       " Snippet framework for autocomplete
-    Plug 'honza/vim-snippets'       " Snippets for vimscript
-    Plug 'ncm2/ncm2-match-highlight' " Highlight what ncm2 matches on
-    Plug 'ncm2/ncm2-html-subscope'  " Subscopes for HTML
-    Plug 'ncm2/ncm2-markdown-subscope'  " Subscopes for Markdown
+    Plug 'roxma/nvim-yarp'             " Dependency for ncm2
+    Plug 'ncm2/ncm2'                   " Asynchronous autocomplete
+    Plug 'ncm2/ncm2-ultisnips'         " Dependency to use ultisnips with ncm2
+    Plug 'ncm2/ncm2-bufword'           " Current buffer word completion
+    Plug 'ncm2/ncm2-path'              " Path completion
+    Plug 'ncm2/ncm2-jedi'              " Python jedi completion
+    Plug 'ncm2/ncm2-vim'               " Vimscript completion
+    Plug 'sirver/ultisnips'            " Snippet framework for autocomplete
+    Plug 'honza/vim-snippets'          " Snippets for vimscript
+    Plug 'ncm2/ncm2-html-subscope'     " Subscopes for HTML
+    Plug 'ncm2/ncm2-markdown-subscope' " Subscopes for Markdown
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
         \ 'do': 'bash install.sh'
-        \ }
+        \ }                            " LSP for vim
 endif
 
 call plug#end() " required
@@ -89,7 +91,7 @@ syntax on                       " Filetype specific syntax highlighting
 set t_Co=256                    " Set terminal color depth
 set whichwrap=b,s,h,l,<,>,~,[,] " Everything wraps
 set encoding=utf-8              " Be 21st century
-set nu                          " show line numbers
+"set nu                          " show line numbers
 set hidden                      " Treat tabs like other editors
 set showcmd                     " Show multiple commands in command line
 set hlsearch                    " Highlight search
@@ -119,7 +121,7 @@ if !has('nvim')
 endif
 
 " Ignore a bunch of not human readable stuff from autocomplete
-set wildignore+=*/.git/*,*.swp,*.pkl
+set wildignore+=*/.git/*,*.swp,*.pkl,*.exe,*.gif,*.jpeg,*.png,*.dll
 
 if v:version >= 800 || has('nvim')
     " When a line wraps keep the current indent
@@ -148,24 +150,15 @@ if has('gui_running')
     set guioptions-=L  "remove left-hand scroll bar
 endif
 
-let g:spring_night_high_constrast = 0
-let g:spring_night_highlight_terminal = 1
 "Disable background color erase to fix the colorshceme
 if &term =~ '256color'
     set t_ut=
 endif
 
-" This fixes spring night for the terminal
-if has('termguicolors')
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-    set termguicolors
-endif
-if has('nvim')
-    set termguicolors
-endif
-
-colorscheme spring-night " Set the colorscheme
+let g:nord_italic = 1
+let g:nord_underline = 1
+let g:nord_italic_comments = 1
+colorscheme nord " Set the colorscheme
 
 " Automatically blow away trailing whitespace on certian filetypes
 "autocmd Filetype c,cpp,java,php,js,python autocmd BufWritePre <buffer> %s/\s\+$//e
@@ -291,11 +284,31 @@ let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
+let g:airline#extensions#whitespace#checks = [ 'indent', 'mixed-indent-file' ]
+let g:airline_theme='nord'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " End airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set up multiple-cursors
+" Set up NCM2
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+try
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+    set completeopt=noinsert,menuone,noselect
+    set shortmess+=c
+catch
+endtry
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" End NCM2
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set up LanguageClientNeovim
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:LanguageClient_serverCommands = {
+    \ 'cpp': ['cquery']
+    \}
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" End LanguageClientNeovim
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
