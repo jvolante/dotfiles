@@ -1,3 +1,9 @@
+" Install vim plug if we don't have it
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim -- create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync |
+endif
 " Get out of vi-compatible mode and don't use local .vimrc
 set noexrc
 set nocompatible
@@ -22,6 +28,8 @@ else
 
     " Undo files are stored away from working files
     set undodir=/tmp/vim-undo-dir
+    set undolevels=1000
+    set undoreload=10000
 
     " Use a different pluggins directory on Windows vs. Linux
     call plug#begin('~/.vim/bundle')
@@ -50,13 +58,6 @@ Plug 'linkinpark342/xonsh-vim'      " Xonsh syntax higlighting
 Plug 'sheerun/vim-polyglot'         " Syntax highlighting for a bunch of languages
 Plug 'vim-scripts/LargeFile'        " Make editing extremely large files faster
 Plug 'jreybert/vimagit'             " Good git workflow in Vim
-Plug 'google/vim-maktaba'           " Dependency for codefmt
-Plug 'google/vim-glaive'            " Dependency for codefmt
-Plug 'google/vim-codefmt'           " Pretty printer integration
-
-if has('python3') || has('python')
-    Plug 'sjl/gundo.vim'            " Full tree based undo in vim
-endif
 
 if v:version >= 800 || has('nvim')
     Plug 'w0rp/ale'                 " Asynchronous linting
@@ -65,13 +66,10 @@ endif
 if has('python3') && has('nvim')
     Plug 'roxma/nvim-yarp'             " Dependency for ncm2
     Plug 'ncm2/ncm2'                   " Asynchronous autocomplete
-    Plug 'ncm2/ncm2-ultisnips'         " Dependency to use ultisnips with ncm2
     Plug 'ncm2/ncm2-bufword'           " Current buffer word completion
     Plug 'ncm2/ncm2-path'              " Path completion
     Plug 'ncm2/ncm2-jedi'              " Python jedi completion
     Plug 'ncm2/ncm2-vim'               " Vimscript completion
-    Plug 'sirver/ultisnips'            " Snippet framework for autocomplete
-    Plug 'honza/vim-snippets'          " Snippets for vimscript
     Plug 'ncm2/ncm2-html-subscope'     " Subscopes for HTML
     Plug 'ncm2/ncm2-markdown-subscope' " Subscopes for Markdown
     Plug 'autozimu/LanguageClient-neovim', {
@@ -114,26 +112,27 @@ set foldmethod=syntax           " Fold based on syntax elemetnts
 set noshowmode                  " Don't do what Airline already does for us
 set undofile                    " Persist undo tree between runs
 set autoread                    " Automatically reload file if it changes
+set noswapfile                  " Don't use swapfiles since I use autosave
 let g:auto_save=1               " Autosave files
 
 if !has('nvim')
-    set ttymouse=xterm2             " Makes mouse work in everything
+    set ttymouse=xterm2         " Makes mouse work in everything
 endif
 
 " Ignore a bunch of not human readable stuff from autocomplete
-set wildignore+=*/.git/*,*.swp,*.pkl,*.exe,*.gif,*.jpeg,*.png,*.dll
+set wildignore+=*/.git/*,*.swp,*.pkl,*.exe,*.gif,*.jpeg,*.png,*.dll,*/__pycache__/*,*.so
 
 if v:version >= 800 || has('nvim')
     " When a line wraps keep the current indent
     set breakindent
 endif
 
-if v:version >= 703 || has('nvim')
+"if v:version >= 703 || has('nvim')
     " Line at 80 characters
-    autocmd BufEnter * set colorcolumn=81
+"    autocmd BufEnter * set colorcolumn=81
     " On current buffer only
-    autocmd BufLeave * set colorcolumn=
-endif
+"    autocmd BufLeave * set colorcolumn=
+"endif
 
 " Make the Statusline nice
 let g:bufferline_echo = 0
@@ -141,8 +140,6 @@ let g:bufferline_echo = 0
 set background=dark
 if has('gui_running')
     set guifont=Fira\ Code\ weight=453\ 12 " Set the font
-    "let g:quantum_italics=1  " Italic comments
-
     "hide toolbars and sidebar
     set guioptions-=m  "remove menu bar
     set guioptions-=T  "remove toolbar
@@ -159,9 +156,6 @@ let g:nord_italic = 1
 let g:nord_underline = 1
 let g:nord_italic_comments = 1
 colorscheme nord " Set the colorscheme
-
-" Automatically blow away trailing whitespace on certian filetypes
-"autocmd Filetype c,cpp,java,php,js,python autocmd BufWritePre <buffer> %s/\s\+$//e
 
 " For some reason whenever I try to do a write I always have a W instead of w
 " Surround these with try/catch so it doesn't complain when I source .vimrc
@@ -180,12 +174,11 @@ nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 
-" Clipboard yank and paste
-nnoremap <leader>y "+y
-nnoremap <leader>p "+p
-
 " Y works in a more consistent fashion
 nnoremap Y y$
+
+" W works in a more consistent fashion
+nnoremap W b
 
 " Remap no hlsearch to space
 nnoremap <leader><space> :nohlsearch<CR>
@@ -194,11 +187,11 @@ nnoremap <leader><space> :nohlsearch<CR>
 nnoremap <leader>p ciw<C-r>0<ESC>
 
 " Copy/paste to clipboard in gvim. May not work on all OS's
-nnoremap <leader>gy "+y
-nnoremap <leader>gp "+gP
+nnoremap <leader>y "+y
+nnoremap <leader>p "+gP
 
 " Tagbar
-nmap <F8> :TagbarToggle<CR>
+nmap <leader>t :TagbarToggle<CR>
 
 " Easyalign
 xmap ga <Plug>(EasyAlign)
@@ -222,8 +215,8 @@ let g:ctrlp_cmd='CtrlPMixed'
 
 " Ignore certain stuff
 let g:ctrlp_custom_ignore={
-    \ 'dir': '\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system|data\|log\|tmp$',
-    \ 'file': '\.exe$\|\.so$\|\.lib$\|\.dat$'
+    \ 'dir': '\.git$\|\.hg$\|\.svn$\|\.yardoc\|public\/images\|public\/system|data\|log\|tmp$\|__pycache__$',
+    \ 'file': '\.exe$\|\.so$\|\.lib$\|\.dat$|\.so$|\.dll$|\.pkl$|\.pyc$'
     \ }
 
 " if RipGrep is available, use it because it is faster than grep
@@ -257,11 +250,19 @@ endtry
 try
     packloadall
     "silent! helptags ALL
+    "I only want to run pylint for python
+    let g:ale_linters = {
+        \ 'python': ['pylint']
+        \ }
+
+    let g:ale_fixers = {
+        \ 'python': ['yapf']
+        \ }
+
     let g:ale_lint_delay=500 " Trying to fix performance issues
     let g:airline#extensions#ale#enabled = 0
-    let g:ale_python_flake8_executable = 'python3'
-    let g:ale_python_flake8_options = '-m flake8 --ignore=E501'
     let g:ale_set_balloons = 0 " Disable obnoxious hovering tooltips
+    let:ale_python_pylint_options=' --rcfile ~/.pylintrc'
 catch
 endtry
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -293,12 +294,11 @@ let g:airline_theme='nord'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set up NCM2
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-try
+if exists("ncm2#enable_for_buffer")
     autocmd BufEnter * call ncm2#enable_for_buffer()
     set completeopt=noinsert,menuone,noselect
     set shortmess+=c
-catch
-endtry
+endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " End NCM2
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
